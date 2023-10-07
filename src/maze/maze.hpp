@@ -10,18 +10,24 @@
 class Maze{
 
 public:
+int startY, startX, endY, endX;
 enum direction{UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8};
-enum paint{WHITE = 16, RED = 32, BLUE = 64, GREEN = 128};
+enum paint{WHITE = 16, ORANGE = 32, BLUE = 64, GREEN = 128};
 
 std::vector<std::vector<char>> paths;
 
-Maze(const int size, const int startY, const int startX,
-     const int endY, const int endX,
+Maze(const int size, const int startY_, const int startX_,
+     const int endY_, const int endX_,
      const int originY = 0, const int originX = 0) : paths(size, std::vector<char>(size, 0)){
     paths[originY][originX] |= paint::WHITE; 
-    paths[startY][startX] |= paint::GREEN;
-    paths[endY][endX] |= paint::BLUE;
+    paths[startY_][startX_] |= paint::GREEN;
+    paths[endY_][endX_] |= paint::BLUE;
     
+    startY = startY_;
+    startX = startX_;
+    endY = endY_;
+    endX = endX_;
+
     if(size > 1){
         expandMaze(originY, originX);
     }
@@ -39,14 +45,18 @@ static void mazeToImage(const std::string&& filename, const Maze& mazeObj){
             double g = 0;
             double b = 0;
 
-            if(newMaze[y][x] & paint::GREEN){
+            if((newMaze[y][x] & paint::GREEN) && (newMaze[y][x] & paint::BLUE)){
+                r = 1;
+            }
+            else if(newMaze[y][x] & paint::GREEN){
                 g = 1;
             }
             else if(newMaze[y][x] & paint::BLUE){
                 b = 1;
             }
-            else if(newMaze[y][x] & paint::RED){
+            else if(newMaze[y][x] & paint::ORANGE){
                 r = 1;
+                g = 0.4;
             }
             else if(newMaze[y][x] & paint::WHITE){
                 r = 1;
@@ -64,6 +74,43 @@ static void mazeToImage(const std::string&& filename, const Maze& mazeObj){
     fout.close();
 }
 
+static void colorSolution(const std::vector<std::vector<int>>& solution, Maze& maze){
+    int curY = maze.endY;
+    int curX = maze.endX;
+    int curDist = solution[curY][curX];
+    
+    if(curDist == -1){
+        return;
+    }
+
+    while(true){
+        if((maze.paths[curY][curX] & direction::UP) && solution[curY-1][curX] == curDist-1){
+            if(--curDist == 0){
+                return;
+            }
+            maze.paths[--curY][curX] |= (paint::GREEN | paint::BLUE);
+        }
+        else if((maze.paths[curY][curX] & direction::RIGHT) && solution[curY][curX+1] == curDist-1){
+            if(--curDist == 0){
+                return;
+            }
+            maze.paths[curY][++curX] |= (paint::GREEN | paint::BLUE);
+        }
+        else if((maze.paths[curY][curX] & direction::DOWN) && solution[curY+1][curX] == curDist-1){
+            if(--curDist == 0){
+                return;
+            }
+            maze.paths[++curY][curX] |= (paint::GREEN | paint::BLUE);
+        }
+        else if((maze.paths[curY][curX] & direction::LEFT) && solution[curY][curX-1] == curDist-1){
+            if(--curDist == 0){
+                return;
+            }
+            maze.paths[curY][--curX] |= (paint::GREEN | paint::BLUE);
+        }
+    }
+}
+
 private:
 std::vector<std::vector<char>> placeWalls() const {
     int size = paths.size();
@@ -77,33 +124,27 @@ std::vector<std::vector<char>> placeWalls() const {
             if(x && (paths[y][x] & direction::LEFT)){
                 newMaze[(y << 1) + 1][x << 1] |= (direction::LEFT | direction::RIGHT | paint::WHITE);
 
-                if( (paths[y][x] & paint::RED) && (paths[y][x-1] & paint::RED) ){
-                    newMaze[(y << 1) + 1][x << 1] |= paint::RED;
+                if( (paths[y][x] & paint::ORANGE) && (paths[y][x-1] & paint::ORANGE) ){
+                    newMaze[(y << 1) + 1][x << 1] |= paint::ORANGE;
+                }
+                if( ( paths[y][x] & (paint::GREEN | paint::BLUE) ) && ( paths[y][x-1] & (paint::GREEN | paint::BLUE) ) ){
+                    newMaze[(y << 1) + 1][x << 1] |= (paint::GREEN | paint::BLUE);
                 }
             }
 
             if(y && (paths[y][x] & direction::UP)){
                 newMaze[y << 1][(x << 1) + 1] |= (direction::UP | direction::DOWN | paint::WHITE);
 
-                if( (paths[y][x] & paint::RED) && (paths[y-1][x] & paint::RED) ){
-                    newMaze[y << 1][(x << 1) + 1] |= paint::RED;
+                if( (paths[y][x] & paint::ORANGE) && (paths[y-1][x] & paint::ORANGE) ){
+                    newMaze[y << 1][(x << 1) + 1] |= paint::ORANGE;
+                }
+                if( (paths[y][x] & (paint::GREEN | paint::BLUE)) && (paths[y-1][x] & (paint::GREEN | paint::BLUE))){
+                    newMaze[y << 1][(x << 1) + 1] |= (paint::GREEN | paint::BLUE);
                 }
             }
         }
     }
 
-    for(int y = 1; y < size; y++){
-        for(int x = 0; x < size; x++){
-            if(paths[y][x] & direction::UP){
-                newMaze[y << 1][(x << 1) + 1] |= (direction::UP | direction::DOWN | paint::WHITE);
-
-                if( (paths[y][x] & paint::RED) && (paths[y-1][x] & paint::RED) ){
-                    newMaze[y << 1][(x << 1) + 1] |= paint::RED;
-                }
-            }
-        }
-    }
-            
     return newMaze;
 }
 
