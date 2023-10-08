@@ -18,7 +18,7 @@ std::vector<std::vector<char>> paths;
 
 Maze(const int size, const int startY_, const int startX_,
      const int endY_, const int endX_,
-     const int originY = 0, const int originX = 0) : paths(size, std::vector<char>(size, 0)){
+     const int originY = 0, const int originX = 0, const bool allowDeadEnds = false) : paths(size, std::vector<char>(size, 0)){
     //Mark the start and goal of the maze
     paths[startY_][startX_] |= paint::START;
     paths[endY_][endX_] |= paint::GOAL;
@@ -31,7 +31,12 @@ Maze(const int size, const int startY_, const int startX_,
 
     //Creates a maze the that uses sizeXsize spaces
     if(size > 1){
-        expandMaze(originY, originX);
+        if(allowDeadEnds){
+            expandMazeWithDeadEnds(originY, originX);
+        }
+        else{
+            expandMaze(originY, originX);
+        }
     }
 }
 
@@ -226,6 +231,50 @@ void expandMaze(const int curY, const int curX){
             case direction::LEFT : paths[curY][curX] |= direction::RIGHT;
             break;
         }
+    }
+}
+
+void expandMazeWithDeadEnds(const int curY, const int curX){
+    //Marks the current position as being part of the maze
+    paths[curY][curX] |= paint::PATH;
+    
+    //Adds the adjacent walls to a list
+    std::list<std::array<int, 3>> walls;
+    if(curY != 0) 
+        walls.push_back({curY - 1, curX, direction::DOWN});
+    if(curX < paths.size()-1) 
+        walls.push_back({curY, curX + 1, direction::LEFT});
+    if(curY < paths.size()-1) 
+        walls.push_back({curY + 1, curX, direction::UP});
+    if(curX != 0) 
+        walls.push_back({curY, curX - 1, direction::RIGHT});
+
+    std::random_device rd;
+    while(!walls.empty()){
+        //Selects a random wall from the list
+        const auto curWallIt = std::next(walls.begin(), rd() % walls.size());
+        const std::array<int, 3> curWall = *curWallIt;
+        walls.erase(curWallIt);
+
+        //Tests if "opening" the wall will add a new position to the maze
+        //In case the next position already is part of the maze, the wall is not "opened"
+        if(paths[curWall[0]][curWall[1]] & paint::PATH){
+            continue;
+        }
+
+        //Add the directions to both positions tha can use the opened path
+        paths[curWall[0]][curWall[1]] |= curWall[2];
+        switch(curWall[2]){
+            case direction::UP : paths[curY][curX] |= direction::DOWN;
+            break;
+            case direction::RIGHT : paths[curY][curX] |= direction::LEFT;
+            break;
+            case direction::DOWN : paths[curY][curX] |= direction::UP;
+            break;
+            case direction::LEFT : paths[curY][curX] |= direction::RIGHT;
+            break;
+        }
+        expandMazeWithDeadEnds(curWall[0], curWall[1]);
     }
 }
 

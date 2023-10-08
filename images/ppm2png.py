@@ -9,8 +9,5 @@ pngPath = directory + r'/pngFiles'
 for f in listdir(ppmPath):
   im = Image.open(join(ppmPath, f))
 
-  print(f)
-  print(im.size)
-  newIm = im.resize((1000, 1000))
-  print(newIm.size)
+  newIm = im.resize((1000, 1000), Image.Resampling.NEAREST)
   newIm.save(join(pngPath, splitext(f)[0] + '.png'))
