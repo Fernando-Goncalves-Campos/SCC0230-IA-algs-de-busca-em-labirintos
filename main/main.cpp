@@ -27,22 +27,22 @@ vector<vector<int>> bfs(Maze& maze){
 
         solution[curPath[0]][curPath[1]] = curPath[2];
 
-        char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::ORANGE;        
+        char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::VISITED;        
 
-        if(curPos & Maze::paint::BLUE){
+        if(curPos & Maze::paint::GOAL){
             return solution;
         }
 
-        if((curPos & Maze::direction::UP) && (maze.paths[curPath[0] - 1][curPath[1]] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::UP) && (maze.paths[curPath[0] - 1][curPath[1]] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0] - 1, curPath[1], curPath[2] + 1});
         }
-        if((curPos & Maze::direction::RIGHT) && (maze.paths[curPath[0]][curPath[1] + 1] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::RIGHT) && (maze.paths[curPath[0]][curPath[1] + 1] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0], curPath[1] + 1, curPath[2] + 1});
         }
-        if((curPos & Maze::direction::DOWN) && (maze.paths[curPath[0] + 1][curPath[1]] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::DOWN) && (maze.paths[curPath[0] + 1][curPath[1]] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0] + 1, curPath[1], curPath[2] + 1});
         }
-        if((curPos & Maze::direction::LEFT) && (maze.paths[curPath[0]][curPath[1] - 1] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::LEFT) && (maze.paths[curPath[0]][curPath[1] - 1] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0], curPath[1] - 1, curPath[2] + 1});
         }
     }
@@ -62,25 +62,25 @@ vector<vector<int>> aStar(Maze& maze){
 
         solution[curPath[0]][curPath[1]] = curPath[2];
 
-        char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::ORANGE;
+        char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::VISITED;
 
-        if(curPos & Maze::paint::BLUE){
+        if(curPos & Maze::paint::GOAL){
             return solution;
         }
 
-        if((curPos & Maze::direction::UP) && (maze.paths[curPath[0] - 1][curPath[1]] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::UP) && (maze.paths[curPath[0] - 1][curPath[1]] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0] - 1, curPath[1], curPath[2] + 1,
                              curPath[2] + 1 + abs(maze.endY - (curPath[0] - 1)) + abs(maze.endX - curPath[1])});
         }
-        if((curPos & Maze::direction::RIGHT) && (maze.paths[curPath[0]][curPath[1] + 1] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::RIGHT) && (maze.paths[curPath[0]][curPath[1] + 1] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0], curPath[1] + 1, curPath[2] + 1,
                              curPath[2] + 1 + abs(maze.endY - curPath[0]) + abs(maze.endX - (curPath[1] + 1))});
         }
-        if((curPos & Maze::direction::DOWN) && (maze.paths[curPath[0] + 1][curPath[1]] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::DOWN) && (maze.paths[curPath[0] + 1][curPath[1]] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0] + 1, curPath[1], curPath[2] + 1,
                              curPath[2] + 1 + abs(maze.endY - (curPath[0] + 1)) + abs(maze.endX - curPath[1])});
         }
-        if((curPos & Maze::direction::LEFT) && (maze.paths[curPath[0]][curPath[1] - 1] & Maze::paint::ORANGE) == 0){
+        if((curPos & Maze::direction::LEFT) && (maze.paths[curPath[0]][curPath[1] - 1] & Maze::paint::VISITED) == 0){
             pathsQueue.push({curPath[0], curPath[1] - 1, curPath[2] + 1,
                              curPath[2] + 1 + abs(maze.endY - curPath[0]) + abs(maze.endX - (curPath[1] - 1))});
         }
@@ -94,20 +94,21 @@ int main(){
     Maze bfsMaze = testMaze;
     Maze aStarMaze = testMaze;
 
+    vector<vector<int>> solutionAStar = aStar(aStarMaze);
+    vector<vector<int>> solutionBFS = bfs(bfsMaze);
     //cout << "A*: " << perftest::benchmark(aStar, aStarMaze) << "ms" << endl;
     //cout << "BFS: " << perftest::benchmark(bfs, bfsMaze) << "ms" << endl;
 
-    vector<vector<int>> solutionAStar = aStar(aStarMaze);
-    vector<vector<int>> solutionBFS = bfs(bfsMaze);
-    /*Maze::mazeToImage("unsolvedMaze.ppm", testMaze);
-    Maze::mazeToImage("bfsMaze.ppm", bfsMaze);
-    Maze::colorSolution(50, 50, solutionBFS, bfsMaze);
-    Maze::mazeToImage("bfsMazeSolution.ppm", bfsMaze);
-    Maze::mazeToImage("aStarMaze.ppm", aStarMaze);
-    Maze::colorSolution(50, 50, solutionAStar, aStarMaze);
-    Maze::mazeToImage("aStarMazeSolution.ppm", aStarMaze);*/
+    //Maze::mazeToImage("unsolvedMaze", testMaze);
+    //Maze::mazeToImage("bfsMaze", bfsMaze);
+    //Maze::mazeToImage("aStarMaze", aStarMaze);
+    //Maze::colorSolution(solutionBFS, bfsMaze);
+    //Maze::colorSolution(solutionAStar, aStarMaze);
+    //Maze::mazeToImage("bfsMazeSolution", bfsMaze);
+    //Maze::mazeToImage("aStarMazeSolution", aStarMaze);
 
-    cout << "A*: " << solutionAStar[aStarMaze.endY][aStarMaze.endX] << '\n';
-    cout << "BFD: " << solutionBFS[bfsMaze.endY][bfsMaze.endX] << '\n';
+    //cout << "A* to image duration: " << perftest::benchmark(Maze::mazeToImage, "aStarMaze.ppm", aStarMaze) << "ms\n";
+    //cout << "BFS to image duration: " << perftest::benchmark(Maze::mazeToImage, "bfsMaze.ppm", bfsMaze) << "ms\n";
+
     return 0;
 }
