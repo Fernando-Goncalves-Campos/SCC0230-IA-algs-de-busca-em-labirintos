@@ -5,6 +5,7 @@
 #include "../src/maze/maze.hpp"
 #include "../src/utils/perftest.hpp"
 #include "../src/utils/printtemplates.hpp"
+#include "../src/utils/createCSV.hpp"
 
 using namespace std;
 
@@ -105,9 +106,10 @@ vector<vector<int>> aStar(Maze& maze){
     return solution;
 }
 
-int main(){
-    //=======================Image testing=======================
-    /*Maze testMaze(20, 3, 3, 18, 18, 7, 7);
+void createExamples(const int size, const int startY_, const int startX_,
+                    const int endY_, const int endX_,
+                    const int originY = 0, const int originX = 0, const bool allowDeadEnds = false){
+    Maze testMaze(size, startY_, startX_, endY_, endX_, originY, originX, allowDeadEnds);
     Maze bfsMaze = testMaze;
     Maze aStarMaze = testMaze;
 
@@ -120,40 +122,44 @@ int main(){
     Maze::colorSolution(solutionBFS, bfsMaze);
     Maze::colorSolution(solutionAStar, aStarMaze);
     Maze::mazeToImage("bfsMazeSolution", bfsMaze);
-    Maze::mazeToImage("aStarMazeSolution", aStarMaze);*/
+    Maze::mazeToImage("aStarMazeSolution", aStarMaze);
+}
+
+vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const vector<int>& sizes){
+    vector<vector<double>> times(sizes.size(), vector<double>(2, 0));
+    for(int i = 0; i < sizes.size(); i++){
+        const int curSize = sizes[i];
+        double totalDuration = 0;
+        for(int j = nRepeats; j >= 0; j--){
+            clog << "\r                                        \r";
+            clog << "\rMaze size: " << curSize << " Remaining tests: " << j << flush;
+            Maze testMaze(curSize, curSize * 0.15, curSize * 0.15, curSize * 0.9, curSize * 0.9, curSize * 0.5, curSize * 0.5);
+            totalDuration += perftest::benchmark(func, testMaze);
+        }
+        times[i][0] = curSize;
+        times[i][1] = totalDuration / nRepeats;
+    }
+    clog << "\r                                        \r" ;
+    return times;
+}
+
+int main(){
+    //=======================Image testing=======================
+    //double totalTime = perftest::benchmark(createExamples, 20, 3, 3, 18, 18, 7, 7, false);
+    //cout << "Total duration for creation of examples: " << totalTime << "ms\n";
 
 
     //=======================Performance testing=======================
-    /*vector<int> sizes{10, 20, 30, 40, 50, 60, 70};
-    const int nRepeats = 10;
+    //vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //const int nRepeats = 64;
 
-    /*vector<vector<double>> bfsTimes(sizes.size(), vector<double>(2, 0));
-    for(int i = 0; i < sizes.size(); i++){
-        const int curSize = sizes[i];
-        double totalDuration = 0;
-        for(int j = nRepeats; j >= 0; j--){
-            clog << "\rMaze size: " << curSize << " Remaining tests: " << j << flush;
-            Maze testMaze(curSize, curSize * 0.15, curSize * 0.15, curSize * 0.9, curSize * 0.9, curSize * 0.5, curSize * 0.5);
-            totalDuration += perftest::benchmark(bfs, testMaze);
-        }
-        bfsTimes[i][0] = curSize;
-        bfsTimes[i][1] = totalDuration / nRepeats;
-    }
-    cout << "Bfs results (ms):\n" << bfsTimes << "\n";*/
+    /*vector<vector<double>> bfsTimes = timeMultipleSolves(bfs, nRepeats, sizes);
+    cout << "Bfs results (ms):\n" << bfsTimes << "\n\n";
+    createCSV(string("bfsResults"), vector<string>{"Size", "Duration"}, bfsTimes);*/
 
-    /*vector<vector<double>> aStarTimes(sizes.size(), vector<double>(2, 0));
-    for(int i = 0; i < sizes.size(); i++){
-        const int curSize = sizes[i];
-        double totalDuration = 0;
-        for(int j = nRepeats; j >= 0; j--){
-            clog << "\rMaze size: " << curSize << " Remaining tests: " << j << flush;
-            Maze testMaze(curSize, curSize * 0.15, curSize * 0.15, curSize * 0.9, curSize * 0.9, curSize * 0.5, curSize * 0.5);
-            totalDuration += perftest::benchmark(aStar, testMaze);
-        }
-        aStarTimes[i][0] = curSize;
-        aStarTimes[i][1] = totalDuration / nRepeats;
-    }
-    cout << "Bfs results (ms):\n" << aStarTimes << "\n";*/
+    /*vector<vector<double>> aStarTimes = timeMultipleSolves(aStar, nRepeats, sizes);
+    cout << "A* results (ms):\n" << aStarTimes << "\n\n";
+    createCSV(string("aStarResults"), vector<string>{"Size", "Duration"}, aStarTimes);*/
 
     return 0;
 }
