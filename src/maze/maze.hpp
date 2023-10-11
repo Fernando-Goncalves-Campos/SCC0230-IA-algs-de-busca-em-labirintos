@@ -45,7 +45,7 @@ static void mazeToImage(const std::string&& filename, const Maze& mazeObj){
     const std::vector<std::vector<char>> newMaze = mazeObj.placeWalls();
     
     //Creates a .ppm image file in the images folder of the projext
-    std::fstream fout(std::string("../images/ppmFiles/") + filename + ".ppm", std::ofstream::out | std::ofstream::trunc);
+    std::fstream fout(filename + ".ppm", std::ofstream::out | std::ofstream::trunc);
     fout << "P3\n" << newMaze.size() << ' ' << newMaze.size() << "\n255\n";
 
     //Add all the pixels of the image

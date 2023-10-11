@@ -26,6 +26,9 @@ vector<vector<int>> bfs(Maze& maze){
     //Saves the solution to the maze
     vector<vector<int>> solution(maze.paths.size(), vector<int>(maze.paths.size(), -1));
 
+    //Used for creating gifs
+    //int frameCount = 0;
+
     while(!pathsQueue.empty()){
         //Looks at the next position
         const array<int, 3> curPath = pathsQueue.front();
@@ -36,6 +39,9 @@ vector<vector<int>> bfs(Maze& maze){
 
         //Marks current positions as being visited
         char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::VISITED;        
+
+        //Creates a frame that will be added to a GIF
+        //Maze::mazeToImage(string("../GIFs/bfsFrames/frame_") + to_string(frameCount++), maze);
 
         //Checks if found the goal
         if(curPos & Maze::paint::GOAL){
@@ -68,6 +74,9 @@ vector<vector<int>> aStar(Maze& maze){
     //Saves the solution to the maze
     vector<vector<int>> solution(maze.paths.size(), vector<int>(maze.paths.size(), -1));
 
+    //Used for creating gifs
+    //int frameCount = 0;
+
     while(!pathsQueue.empty()){
         //Looks at the next position
         const array<int, 4> curPath = pathsQueue.top();
@@ -78,6 +87,9 @@ vector<vector<int>> aStar(Maze& maze){
 
         //Marks current positions as being visited
         char& curPos = maze.paths[curPath[0]][curPath[1]] |= Maze::paint::VISITED;
+
+        //Creates a frame that will be added to a GIF
+        //Maze::mazeToImage(string("../GIFs/aStarFrames/frame_") + to_string(frameCount++), maze);
 
         //Checks if found the goal
         if(curPos & Maze::paint::GOAL){
@@ -113,16 +125,22 @@ void createExamples(const int size, const int startY_, const int startX_,
     Maze bfsMaze = testMaze;
     Maze aStarMaze = testMaze;
 
+    //It's possible to create frames to be converted to a gif (this might increase substantially the execution time)
+    //Make sure that the lines: 30, 44, 78 and 92 are not commented
     vector<vector<int>> solutionAStar = aStar(aStarMaze);
     vector<vector<int>> solutionBFS = bfs(bfsMaze);
 
-    Maze::mazeToImage("unsolvedMaze", testMaze);
-    Maze::mazeToImage("bfsMaze", bfsMaze);
-    Maze::mazeToImage("aStarMaze", aStarMaze);
+
+    //Create ppm images to be converted to png files
+    /*Maze::mazeToImage("../images/ppmFiles/unsolvedMaze", testMaze);
+    Maze::mazeToImage("../images/ppmFiles/bfsMaze", bfsMaze);
+    Maze::mazeToImage("../images/ppmFiles/aStarMaze", aStarMaze);
     Maze::colorSolution(solutionBFS, bfsMaze);
     Maze::colorSolution(solutionAStar, aStarMaze);
-    Maze::mazeToImage("bfsMazeSolution", bfsMaze);
-    Maze::mazeToImage("aStarMazeSolution", aStarMaze);
+    Maze::mazeToImage("../images/ppmFiles/bfsMazeSolution", bfsMaze);
+    Maze::mazeToImage("../images/ppmFiles/aStarMazeSolution", aStarMaze);*/
+
+    
 }
 
 vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const vector<int>& sizes){
@@ -144,9 +162,9 @@ vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const v
 }
 
 int main(){
-    //=======================Image testing=======================
-    //double totalTime = perftest::benchmark(createExamples, 20, 3, 3, 18, 18, 7, 7, false);
-    //cout << "Total duration for creation of examples: " << totalTime << "ms\n";
+    //=======================Image testing=============================
+    double totalTime = perftest::benchmark(createExamples, 30, 5, 5, 25, 25, 10, 10, false);
+    cout << "Total duration for creation of examples: " << totalTime << "ms\n";
 
 
     //=======================Performance testing=======================
@@ -155,11 +173,11 @@ int main(){
 
     /*vector<vector<double>> bfsTimes = timeMultipleSolves(bfs, nRepeats, sizes);
     cout << "Bfs results (ms):\n" << bfsTimes << "\n\n";
-    createCSV(string("bfsResults"), vector<string>{"Size", "Duration"}, bfsTimes);*/
+    createCSV(string("../CSVs/bfsResults"), vector<string>{"Size", "Duration"}, bfsTimes);*/
 
     /*vector<vector<double>> aStarTimes = timeMultipleSolves(aStar, nRepeats, sizes);
     cout << "A* results (ms):\n" << aStarTimes << "\n\n";
-    createCSV(string("aStarResults"), vector<string>{"Size", "Duration"}, aStarTimes);*/
+    createCSV(string("../CSVs/aStarResults"), vector<string>{"Size", "Duration"}, aStarTimes);*/
 
     return 0;
 }

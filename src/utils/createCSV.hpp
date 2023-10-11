@@ -3,7 +3,7 @@
 
 template <typename T, typename Alloc1, typename Alloc2>
 void createCSV(const std::string&& filename, const std::vector<std::string>&& colNames, const std::vector<std::vector<T, Alloc1>, Alloc2>& data){
-    std::fstream fout(std::string("../CSVs/") + filename + ".csv", std::ofstream::out | std::ofstream::trunc);
+    std::fstream fout(filename + ".csv", std::ofstream::out | std::ofstream::trunc);
 
     for(int j = 0; j < colNames.size(); j++){
         if(j){

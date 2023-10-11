@@ -1,13 +1,12 @@
 from PIL import Image
-from os import listdir
-from os.path import dirname, join, splitext
+import os
 
-directory = dirname(__file__)
+directory = os.path.dirname(__file__)
 ppmPath = directory + r'/ppmFiles'
 pngPath = directory + r'/pngFiles'
 
-for f in listdir(ppmPath):
-  im = Image.open(join(ppmPath, f))
+for f in os.listdir(ppmPath):
+  im = Image.open(os.path.join(ppmPath, f))
 
   newIm = im.resize((1000, 1000), Image.Resampling.NEAREST)
-  newIm.save(join(pngPath, splitext(f)[0] + '.png'))
+  newIm.save(os.path.join(pngPath, os.path.splitext(f)[0] + '.png'))
