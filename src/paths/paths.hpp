@@ -5,7 +5,7 @@
 
 class Paths{
 public:
-    int startY, startX, endY, endX;
+    int startY = 0, startX = 0, endY = 0, endX = 0;
 
     enum direction{UP = 1, RIGHT = 2, DOWN = 4, LEFT = 8};
     enum paint{PATH = 16, VISITED = 32, START = 64, GOAL = 128, SOLUTION = 192};
@@ -15,10 +15,19 @@ public:
     Paths(const size_t size, const int startY_, const int startX_,
           const int endY_, const int endX_) 
           : paths(size, std::vector<char>(size, 0)){
-        startY = startY_;
-        startX = startX_;
-        endY = endY_;
-        endX = endX_;
+        //Saves the start and end positions
+        if(startY_ >= 0 && startY_ <= size - 1)
+            startY = startY_;
+        if(startX_ >= 0 && startX_ <= size - 1)
+            startX = startX_;
+        if(endY_ >= 0 && endY_ <= size - 1)
+            endY = endY_;
+        if(endX_ >= 0 && endX_ <= size - 1)
+            endX = endX_;
+
+        //Mark the start and goal of the maze
+        paths[startY][startX] |= paint::START;
+        paths[endY][endX] |= paint::GOAL;
     };
 
     virtual void toImage(const std::string& filename) const {        

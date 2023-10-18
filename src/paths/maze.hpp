@@ -13,16 +13,16 @@ class Maze : public Paths{
 public:
     Maze(const size_t size, const int startY_, const int startX_,
          const int endY_, const int endX_,
-         const int originY = 0, const int originX = 0, const bool allowDeadEnds = false)
+         int originY = 0, int originX = 0, const bool allowDeadEnds = false)
          : Paths(size, startY_, startX_, endY_, endX_){
-        
-        //Mark the start and goal of the maze
-        paths[startY_][startX_] |= paint::START;
-        paths[endY_][endX_] |= paint::GOAL;
-
         //Creates a maze the that uses sizeXsize spaces
         if(size == 0)
             return;
+        if(originY < 0 || originY > size-1)
+            originY = 0;
+        
+        if(originX < 0 || originX > size-1)
+            originX = 0;
 
         if(allowDeadEnds)
             expandMazeWithDeadEnds(originY, originX);
