@@ -10,9 +10,14 @@ def get_number(file_name):
 def createGIF(outputPath, framesPath):
     numberedFrames = [[get_number(fName), os.path.join(framesPath, fName)] for fName in os.listdir(framesPath)]
 
+    if len(numberedFrames) == 0 :
+        return
+    
     with contextlib.ExitStack() as stack:
         frames = (stack.enter_context(Image.open(f[1])) for f in sorted(numberedFrames))
 
+        
+        
         frames = (f.resize((800, 800), Image.Resampling.NEAREST) for f in frames)
 
         firstFrame = next(frames)
@@ -26,3 +31,5 @@ aStarFramesPath = directory + "/aStarFrames"
 
 createGIF(directory + "/bfsAnimation.gif", bfsFramesPath)
 createGIF(directory + "/aStarAnimation.gif", aStarFramesPath)
+createGIF(directory + "/dfsAnimation.gif", bfsFramesPath)
+createGIF(directory + "/bestFirstAnimation.gif", aStarFramesPath)

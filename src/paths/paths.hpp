@@ -21,6 +21,11 @@ public:
         endX = endX_;
     };
 
+    virtual void toImage(const std::string& filename) const {        
+        //Creates a .ppm image file in the images folder of the project
+        Paths::createImage(filename, paths);
+    }
+
     static void createImage(const std::string& filename, const std::vector<std::vector<char>>& paths){
         //Creates a .ppm image file in the images folder of the project
         std::fstream fout(filename + ".ppm", std::ofstream::out | std::ofstream::trunc);
@@ -91,6 +96,9 @@ public:
                 if(--curDist == 0)
                     return;
                 paths[curY][--curX] |= paint::SOLUTION;
+            }
+            else{
+                break;
             }
         }
     }

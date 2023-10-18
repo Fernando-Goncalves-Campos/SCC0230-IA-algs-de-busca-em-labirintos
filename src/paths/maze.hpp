@@ -30,7 +30,7 @@ public:
             expandMaze(originY, originX);
     }
 
-    void mazeToImage(const std::string& filename){
+    void toImage(const std::string& filename) const override {
         //Add walls to the maze to make easier to visualize
         const std::vector<std::vector<char>> paths = placeWalls();
         
@@ -38,7 +38,7 @@ public:
         Paths::createImage(filename, paths);
     }
 
-    void mazeToImage(const std::string&filename, const std::vector<std::vector<int>>& solution){
+    void toImage(const std::string&filename, const std::vector<std::vector<int>>& solution) const {
         //Add walls to the maze to make easier to visualize
         const std::vector<std::vector<char>> paths = placeWalls(solution);
         
