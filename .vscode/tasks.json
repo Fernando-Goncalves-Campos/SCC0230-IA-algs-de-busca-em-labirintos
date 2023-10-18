@@ -11,6 +11,7 @@
                 "-fconcepts",
                 "-fconcepts-ts",
                 "-fsplit-stack",
+                "-O3",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

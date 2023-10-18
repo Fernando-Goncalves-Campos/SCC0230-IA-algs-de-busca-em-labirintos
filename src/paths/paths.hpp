@@ -16,18 +16,14 @@ public:
           const int endY_, const int endX_) 
           : paths(size, std::vector<char>(size, 0)){
         //Saves the start and end positions
-        if(startY_ >= 0 && startY_ <= size - 1)
+        if(startY_ >= 0 && startY_ < size)
             startY = startY_;
-        if(startX_ >= 0 && startX_ <= size - 1)
+        if(startX_ >= 0 && startX_ < size)
             startX = startX_;
-        if(endY_ >= 0 && endY_ <= size - 1)
+        if(endY_ >= 0 && endY_ < size)
             endY = endY_;
-        if(endX_ >= 0 && endX_ <= size - 1)
+        if(endX_ >= 0 && endX_ < size)
             endX = endX_;
-
-        //Mark the start and goal of the maze
-        paths[startY][startX] |= paint::START;
-        paths[endY][endX] |= paint::GOAL;
     };
 
     virtual void toImage(const std::string& filename) const {        
