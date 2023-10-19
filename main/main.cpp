@@ -84,7 +84,7 @@ vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, c
         for(int j = nRepeats; j >= 0; j--){
             clog << "\r                                        \r";
             clog << "\rMaze size: " << curSize << " Remaining tests: " << j << flush;
-            Maze testMaze(curSize, curSize * 0.2, curSize * 0.2, curSize * 0.85, curSize * 0.85, curSize * 0.5, curSize * 0.5, false);
+            Maze testMaze(curSize, curSize * 0.35, curSize * 0.35, curSize * 0.65, curSize * 0.65, curSize * 0.5, curSize * 0.5, false);
             totalDuration += perftest::benchmark(func, testMaze);
         }
         times[i][0] = curSize;
@@ -96,11 +96,11 @@ vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, c
 
 void main_(){
     //=======================Image testing=============================
-    //createExamplesMaze(100, 25, 25, 80, 80, 50, 50, false);
+    createExamplesMaze(20, 5, 5, 15, 15, 10, 10, false);
 
     //=======================Performance testing=======================
-    vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    const int nRepeats = 64;
+    //vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //const int nRepeats = 128;
 
     /*vector<vector<double>> bfsTimes = timeMultipleSolves(bfs, nRepeats, sizes);
     cout << "Bfs results (ms):\n" << bfsTimes << "\n\n";
