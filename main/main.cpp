@@ -76,7 +76,7 @@ void createExamplesCave(const size_t size, const int startY_, const int startX_,
     bestFirstCave.toImage("../images/ppmFiles/bestFirstCaveSolution");
 }
 
-vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const vector<int>& sizes){
+vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, const vector<int>& sizes){
     vector<vector<double>> times(sizes.size(), vector<double>(2, 0));
     for(int i = 0; i < sizes.size(); i++){
         const int curSize = sizes[i];
@@ -84,7 +84,7 @@ vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const v
         for(int j = nRepeats; j >= 0; j--){
             clog << "\r                                        \r";
             clog << "\rMaze size: " << curSize << " Remaining tests: " << j << flush;
-            Maze testMaze(curSize, curSize * 0.15, curSize * 0.15, curSize * 0.9, curSize * 0.9, curSize * 0.5, curSize * 0.5);
+            Maze testMaze(curSize, curSize * 0.2, curSize * 0.2, curSize * 0.85, curSize * 0.85, curSize * 0.5, curSize * 0.5, false);
             totalDuration += perftest::benchmark(func, testMaze);
         }
         times[i][0] = curSize;
@@ -96,11 +96,11 @@ vector<vector<double>> timeMultipleSolves(auto func, const int nRepeats, const v
 
 void main_(){
     //=======================Image testing=============================
-    //createExamplesMaze(30, 5, 5, 25, 25, 10, 10, false);
+    //createExamplesMaze(100, 25, 25, 80, 80, 50, 50, false);
 
     //=======================Performance testing=======================
-    //vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    //const int nRepeats = 64;
+    vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    const int nRepeats = 64;
 
     /*vector<vector<double>> bfsTimes = timeMultipleSolves(bfs, nRepeats, sizes);
     cout << "Bfs results (ms):\n" << bfsTimes << "\n\n";

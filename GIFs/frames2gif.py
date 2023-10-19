@@ -28,8 +28,10 @@ def createGIF(outputPath, framesPath):
 directory = os.path.dirname(__file__)
 bfsFramesPath = directory + "/bfsFrames"
 aStarFramesPath = directory + "/aStarFrames"
+dfsFramesPath = directory + "/dfsFrames"
+bestFirstFramesPath = directory + "/bestFirstFrames"
 
 createGIF(directory + "/bfsAnimation.gif", bfsFramesPath)
 createGIF(directory + "/aStarAnimation.gif", aStarFramesPath)
-createGIF(directory + "/dfsAnimation.gif", bfsFramesPath)
-createGIF(directory + "/bestFirstAnimation.gif", aStarFramesPath)
+createGIF(directory + "/dfsAnimation.gif", dfsFramesPath)
+createGIF(directory + "/bestFirstAnimation.gif", bestFirstFramesPath)

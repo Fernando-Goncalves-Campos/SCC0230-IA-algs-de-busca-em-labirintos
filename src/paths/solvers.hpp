@@ -32,6 +32,11 @@ std::vector<std::vector<int>> bfs(Paths& grid){
         const std::array<int, 3> curPath = pathsQueue.front();
         pathsQueue.pop();
 
+        //Tests if the node already was visited
+        if(grid.paths[curPath[0]][curPath[1]] & Paths::paint::VISITED){
+            continue;
+        }
+
         //Saves the distance to the current position ftom the start
         solution[curPath[0]][curPath[1]] = curPath[2];
 
@@ -79,6 +84,11 @@ std::vector<std::vector<int>> aStar(Paths& grid){
         //Looks at the next position
         const std::array<int, 4> curPath = pathsQueue.top();
         pathsQueue.pop();
+
+        //Tests if the node already was visited
+        if(grid.paths[curPath[0]][curPath[1]] & Paths::paint::VISITED){
+            continue;
+        }
 
         //Saves the distance to the current position ftom the start
         solution[curPath[0]][curPath[1]] = curPath[2];
@@ -132,6 +142,11 @@ std::vector<std::vector<int>> dfs(Paths& grid){
         const std::array<int, 3> curPath = pathsStack.top();
         pathsStack.pop();
 
+        //Tests if the node already was visited
+        if(grid.paths[curPath[0]][curPath[1]] & Paths::paint::VISITED){
+            continue;
+        }
+
         //Saves the distance to the current position ftom the start
         solution[curPath[0]][curPath[1]] = curPath[2];
 
@@ -175,10 +190,18 @@ std::vector<std::vector<int>> bestFirst(Paths& grid){
     //Used for creating gifs
     //int frameCount = 0;
 
+    //Used to avoid moving only in one direction
+    bool oddIteration = false;
+
     while(!pathsStack.empty()){
         //Looks at the next position
         const std::array<int, 4> curPath = pathsStack.top();
         pathsStack.pop();
+
+        //Tests if the node already was visited
+        if(grid.paths[curPath[0]][curPath[1]] & Paths::paint::VISITED){
+            continue;
+        }
 
         //Saves the distance to the current position ftom the start
         solution[curPath[0]][curPath[1]] = curPath[2];
@@ -198,25 +221,30 @@ std::vector<std::vector<int>> bestFirst(Paths& grid){
         std::vector<std::array<int, 4>> adjSpaces;
         if((curPos & Paths::direction::UP) && (grid.paths[curPath[0] - 1][curPath[1]] & Paths::paint::VISITED) == 0){
             adjSpaces.push_back({curPath[0] - 1, curPath[1], curPath[2] + 1,
-            abs(grid.endY - (curPath[0] - 1)) + abs(grid.endX - curPath[1])});
+                                abs(grid.endY - (curPath[0] - 1)) + abs(grid.endX - curPath[1])});
         }
         if((curPos & Paths::direction::RIGHT) && (grid.paths[curPath[0]][curPath[1] + 1] & Paths::paint::VISITED) == 0){
             adjSpaces.push_back({curPath[0], curPath[1] + 1, curPath[2] + 1,
-            abs(grid.endY - curPath[0]) + abs(grid.endX - (curPath[1] + 1))});
+                                abs(grid.endY - curPath[0]) + abs(grid.endX - (curPath[1] + 1))});
         }
         if((curPos & Paths::direction::DOWN) && (grid.paths[curPath[0] + 1][curPath[1]] & Paths::paint::VISITED) == 0){
             adjSpaces.push_back({curPath[0] + 1, curPath[1], curPath[2] + 1,
-            abs(grid.endY - (curPath[0] + 1)) + abs(grid.endX - curPath[1])});
+                                abs(grid.endY - (curPath[0] + 1)) + abs(grid.endX - curPath[1])});
         }
         if((curPos & Paths::direction::LEFT) && (grid.paths[curPath[0]][curPath[1] - 1] & Paths::paint::VISITED) == 0){
             adjSpaces.push_back({curPath[0], curPath[1] - 1, curPath[2] + 1,
-            abs(grid.endY - curPath[0]) + abs(grid.endX - (curPath[1] - 1))});
+                                abs(grid.endY - curPath[0]) + abs(grid.endX - (curPath[1] - 1))});
         }
 
         //Sorts the adjacent spaces considering their distance to the end
-        sort(adjSpaces.begin(), adjSpaces.end(), [](const std::array<int, 4>& pointA, const std::array<int, 4>& pointB) -> bool {
+        sort(adjSpaces.begin(), adjSpaces.end(), [&oddIteration](const std::array<int, 4>& pointA, const std::array<int, 4>& pointB) -> bool {
+            if(pointA[3] == pointB[3]){
+                return oddIteration;
+            }
             return pointA[3] > pointB[3];
         });
+
+        oddIteration = !oddIteration;
 
         for(int i = 0; i < adjSpaces.size(); i++){
             pathsStack.push(adjSpaces[i]);
