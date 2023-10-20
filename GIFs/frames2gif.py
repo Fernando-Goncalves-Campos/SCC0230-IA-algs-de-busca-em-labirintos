@@ -15,14 +15,12 @@ def createGIF(outputPath, framesPath):
     
     with contextlib.ExitStack() as stack:
         frames = (stack.enter_context(Image.open(f[1])) for f in sorted(numberedFrames))
-
-        
         
         frames = (f.resize((800, 800), Image.Resampling.NEAREST) for f in frames)
 
         firstFrame = next(frames)
 
-        firstFrame.save(fp=outputPath, format='GIF', append_images=frames, save_all=True, duration=1, loop=0)
+        firstFrame.save(fp=outputPath, format='GIF', append_images=frames, save_all=True, duration=20, loop=0)
 
 
 directory = os.path.dirname(__file__)

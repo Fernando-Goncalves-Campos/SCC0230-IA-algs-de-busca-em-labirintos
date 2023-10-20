@@ -96,7 +96,7 @@ vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, c
 
 void main_(){
     //=======================Image testing=============================
-    createExamplesMaze(20, 5, 5, 15, 15, 10, 10, false);
+    //createExamplesMaze(20, 5, 5, 15, 15, 10, 10, false);
 
     //=======================Performance testing=======================
     //vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -121,7 +121,7 @@ void main_(){
 
     //=======================Caves testing=============================
     //It isn't guaranteed that the cave will have a solution
-    //createExamplesCave(100, 15, 15, 90, 90, 45, 30);
+    createExamplesCave(100, 15, 15, 90, 90, 45, 30);
 }
 
 int main(){
