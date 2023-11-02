@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
 
-#include "../src/paths/paths.hpp"
-#include "../src/paths/maze.hpp"
-#include "../src/paths/cave.hpp"
-#include "../src/paths/solvers.hpp"
+#include "../src/grid/grid.hpp"
+#include "../src/grid/maze.hpp"
+#include "../src/grid/cave.hpp"
+#include "../src/grid/solvers.hpp"
+#include "../src/grid/canvas.hpp"
 
 #include "../src/utils/perftest.hpp"
 #include "../src/utils/printtemplates.hpp"
@@ -40,8 +41,8 @@ void createExamplesMaze(const size_t size, const int startY_, const int startX_,
     bestFirstMaze.colorSolution(solutionBestFirst);
     bfsMaze.toImage("../images/ppmFiles/bfsMazeSolution");
     aStarMaze.toImage("../images/ppmFiles/aStarMazeSolution");
-    dfsMaze.toImage("../images/ppmFiles/dfsMazeSolution", solutionDfs);
-    bestFirstMaze.toImage("../images/ppmFiles/bestFirstMazeSolution", solutionBestFirst);
+    dfsMaze.toImage("../images/ppmFiles/dfsMazeSolution");
+    bestFirstMaze.toImage("../images/ppmFiles/bestFirstMazeSolution");
 }
 
 void createExamplesCave(const size_t size, const int startY_, const int startX_,
@@ -74,6 +75,39 @@ void createExamplesCave(const size_t size, const int startY_, const int startX_,
     aStarCave.toImage("../images/ppmFiles/aStarCaveSolution");
     dfsCave.toImage("../images/ppmFiles/dfsCaveSolution");
     bestFirstCave.toImage("../images/ppmFiles/bestFirstCaveSolution");
+}
+
+void createExamplesCanvas(const size_t size, const int startY_, const int startX_,
+                          const int endY_, const int endX_){
+    Canvas testCanvas(size, startY_, startX_, endY_, endX_);
+    testCanvas.placeWall(endY_ - 1, endX_);
+    testCanvas.placeWall(endY_, endX_ - 1);
+    Canvas bfsCanvas = testCanvas;
+    Canvas aStarCanvas = testCanvas;
+    Canvas dfsCanvas = testCanvas;
+    Canvas bestFirstCanvas = testCanvas;
+
+    //It's possible to create frames to be converted to a gif (this might increase substantially the execution time and create thousands of files)
+    //Make sure that the lines for creating frames are not commented in the function
+    vector<vector<int>> solutionBfs = bfs(bfsCanvas);
+    vector<vector<int>> solutionAStar = aStar(aStarCanvas);
+    vector<vector<int>> solutionDfs = dfs(dfsCanvas);
+    vector<vector<int>> solutionBestFirst = bestFirst(bestFirstCanvas);
+
+    //Create ppm images to be converted to png files
+    testCanvas.toImage("../images/ppmFiles/unsolvedCanvas");
+    bfsCanvas.toImage("../images/ppmFiles/bfsCanvas");
+    aStarCanvas.toImage("../images/ppmFiles/aStarCanvas");
+    dfsCanvas.toImage("../images/ppmFiles/dfsCanvas");
+    bestFirstCanvas.toImage("../images/ppmFiles/bestFirstCanvas");
+    bfsCanvas.colorSolution(solutionBfs);
+    aStarCanvas.colorSolution(solutionAStar);
+    dfsCanvas.colorSolution(solutionDfs);
+    bestFirstCanvas.colorSolution(solutionBestFirst);
+    bfsCanvas.toImage("../images/ppmFiles/bfsCanvasSolution");
+    aStarCanvas.toImage("../images/ppmFiles/aStarCanvasSolution");
+    dfsCanvas.toImage("../images/ppmFiles/dfsCanvasSolution");
+    bestFirstCanvas.toImage("../images/ppmFiles/bestFirstCanvasSolution");
 }
 
 vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, const vector<int>& sizes){
@@ -120,8 +154,11 @@ void main_(){
 
 
     //=======================Caves testing=============================
-    //It isn't guaranteed that the cave will have a solution
-    createExamplesCave(100, 15, 15, 90, 90, 45, 30);
+    //createExamplesCave(100, 15, 15, 80, 80, 50, 6);
+
+
+    //=======================Canvas testing=============================
+    //createExamplesCanvas(100, 15, 15, 90, 90);
 }
 
 int main(){

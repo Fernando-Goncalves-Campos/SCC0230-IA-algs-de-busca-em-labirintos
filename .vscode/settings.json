@@ -62,6 +62,7 @@
         "variant": "cpp",
         "stack": "cpp",
         "queue": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "bitset": "cpp"
     }
 }

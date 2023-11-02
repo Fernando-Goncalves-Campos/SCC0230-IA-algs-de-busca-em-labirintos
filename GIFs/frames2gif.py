@@ -16,7 +16,7 @@ def createGIF(outputPath, framesPath):
     with contextlib.ExitStack() as stack:
         frames = (stack.enter_context(Image.open(f[1])) for f in sorted(numberedFrames))
         
-        frames = (f.resize((800, 800), Image.Resampling.NEAREST) for f in frames)
+        frames = (f.resize((720, 720), Image.Resampling.NEAREST) for f in frames)
 
         firstFrame = next(frames)
 
