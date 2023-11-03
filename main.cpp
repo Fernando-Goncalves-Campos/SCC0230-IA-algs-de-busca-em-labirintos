@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 
-#include "../src/grid/grid.hpp"
-#include "../src/grid/maze.hpp"
-#include "../src/grid/cave.hpp"
-#include "../src/grid/solvers.hpp"
-#include "../src/grid/canvas.hpp"
+#include "./src/grid/grid.hpp"
+#include "./src/grid/maze.hpp"
+#include "./src/grid/cave.hpp"
+#include "./src/grid/solvers.hpp"
+#include "./src/grid/canvas.hpp"
 
-#include "../src/utils/perftest.hpp"
-#include "../src/utils/printtemplates.hpp"
-#include "../src/utils/createCSV.hpp"
+#include "./src/utils/perftest.hpp"
+#include "./src/utils/printtemplates.hpp"
+#include "./src/utils/createCSV.hpp"
 
 using namespace std;
 
@@ -30,19 +30,19 @@ void createExamplesMaze(const size_t size, const int startY_, const int startX_,
     vector<vector<int>> solutionBestFirst = bestFirst(bestFirstMaze);
 
     //Create ppm images to be converted to png files
-    testMaze.toImage("../images/ppmFiles/unsolvedMaze");
-    bfsMaze.toImage("../images/ppmFiles/bfsMaze");
-    aStarMaze.toImage("../images/ppmFiles/aStarMaze");
-    dfsMaze.toImage("../images/ppmFiles/dfsMaze");
-    bestFirstMaze.toImage("../images/ppmFiles/bestFirstMaze");
+    testMaze.toImage("./images/ppmFiles/unsolvedMaze");
+    bfsMaze.toImage("./images/ppmFiles/bfsMaze");
+    aStarMaze.toImage("./images/ppmFiles/aStarMaze");
+    dfsMaze.toImage("./images/ppmFiles/dfsMaze");
+    bestFirstMaze.toImage("./images/ppmFiles/bestFirstMaze");
     bfsMaze.colorSolution(solutionBfs);
     aStarMaze.colorSolution(solutionAStar);
     dfsMaze.colorSolution(solutionDfs);
     bestFirstMaze.colorSolution(solutionBestFirst);
-    bfsMaze.toImage("../images/ppmFiles/bfsMazeSolution");
-    aStarMaze.toImage("../images/ppmFiles/aStarMazeSolution");
-    dfsMaze.toImage("../images/ppmFiles/dfsMazeSolution");
-    bestFirstMaze.toImage("../images/ppmFiles/bestFirstMazeSolution");
+    bfsMaze.toImage("./images/ppmFiles/bfsMazeSolution");
+    aStarMaze.toImage("./images/ppmFiles/aStarMazeSolution");
+    dfsMaze.toImage("./images/ppmFiles/dfsMazeSolution");
+    bestFirstMaze.toImage("./images/ppmFiles/bestFirstMazeSolution");
 }
 
 void createExamplesCave(const size_t size, const int startY_, const int startX_,
@@ -62,19 +62,19 @@ void createExamplesCave(const size_t size, const int startY_, const int startX_,
     vector<vector<int>> solutionBestFirst = bestFirst(bestFirstCave);
 
     //Create ppm images to be converted to png files
-    testCave.toImage("../images/ppmFiles/unsolvedCave");
-    bfsCave.toImage("../images/ppmFiles/bfsCave");
-    aStarCave.toImage("../images/ppmFiles/aStarCave");
-    dfsCave.toImage("../images/ppmFiles/dfsCave");
-    bestFirstCave.toImage("../images/ppmFiles/bestFirstCave");
+    testCave.toImage("./images/ppmFiles/unsolvedCave");
+    bfsCave.toImage("./images/ppmFiles/bfsCave");
+    aStarCave.toImage("./images/ppmFiles/aStarCave");
+    dfsCave.toImage("./images/ppmFiles/dfsCave");
+    bestFirstCave.toImage("./images/ppmFiles/bestFirstCave");
     bfsCave.colorSolution(solutionBfs);
     aStarCave.colorSolution(solutionAStar);
     dfsCave.colorSolution(solutionDfs);
     bestFirstCave.colorSolution(solutionBestFirst);
-    bfsCave.toImage("../images/ppmFiles/bfsCaveSolution");
-    aStarCave.toImage("../images/ppmFiles/aStarCaveSolution");
-    dfsCave.toImage("../images/ppmFiles/dfsCaveSolution");
-    bestFirstCave.toImage("../images/ppmFiles/bestFirstCaveSolution");
+    bfsCave.toImage("./images/ppmFiles/bfsCaveSolution");
+    aStarCave.toImage("./images/ppmFiles/aStarCaveSolution");
+    dfsCave.toImage("./images/ppmFiles/dfsCaveSolution");
+    bestFirstCave.toImage("./images/ppmFiles/bestFirstCaveSolution");
 }
 
 void createExamplesCanvas(const size_t size, const int startY_, const int startX_,
@@ -95,19 +95,19 @@ void createExamplesCanvas(const size_t size, const int startY_, const int startX
     vector<vector<int>> solutionBestFirst = bestFirst(bestFirstCanvas);
 
     //Create ppm images to be converted to png files
-    testCanvas.toImage("../images/ppmFiles/unsolvedCanvas");
-    bfsCanvas.toImage("../images/ppmFiles/bfsCanvas");
-    aStarCanvas.toImage("../images/ppmFiles/aStarCanvas");
-    dfsCanvas.toImage("../images/ppmFiles/dfsCanvas");
-    bestFirstCanvas.toImage("../images/ppmFiles/bestFirstCanvas");
+    testCanvas.toImage("./images/ppmFiles/unsolvedCanvas");
+    bfsCanvas.toImage("./images/ppmFiles/bfsCanvas");
+    aStarCanvas.toImage("./images/ppmFiles/aStarCanvas");
+    dfsCanvas.toImage("./images/ppmFiles/dfsCanvas");
+    bestFirstCanvas.toImage("./images/ppmFiles/bestFirstCanvas");
     bfsCanvas.colorSolution(solutionBfs);
     aStarCanvas.colorSolution(solutionAStar);
     dfsCanvas.colorSolution(solutionDfs);
     bestFirstCanvas.colorSolution(solutionBestFirst);
-    bfsCanvas.toImage("../images/ppmFiles/bfsCanvasSolution");
-    aStarCanvas.toImage("../images/ppmFiles/aStarCanvasSolution");
-    dfsCanvas.toImage("../images/ppmFiles/dfsCanvasSolution");
-    bestFirstCanvas.toImage("../images/ppmFiles/bestFirstCanvasSolution");
+    bfsCanvas.toImage("./images/ppmFiles/bfsCanvasSolution");
+    aStarCanvas.toImage("./images/ppmFiles/aStarCanvasSolution");
+    dfsCanvas.toImage("./images/ppmFiles/dfsCanvasSolution");
+    bestFirstCanvas.toImage("./images/ppmFiles/bestFirstCanvasSolution");
 }
 
 vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, const vector<int>& sizes){
@@ -130,7 +130,7 @@ vector<vector<double>> timeMultipleSolves(const auto func, const int nRepeats, c
 
 void main_(){
     //=======================Image testing=============================
-    //createExamplesMaze(20, 5, 5, 15, 15, 10, 10, false);
+    createExamplesMaze(20, 5, 5, 15, 15, 10, 10, false);
 
     //=======================Performance testing=======================
     //vector<int> sizes{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -138,19 +138,19 @@ void main_(){
 
     /*vector<vector<double>> bfsTimes = timeMultipleSolves(bfs, nRepeats, sizes);
     cout << "Bfs results (ms):\n" << bfsTimes << "\n\n";
-    createCSV(string("../CSVs/bfsResults"), vector<string>{"Size", "Duration"}, bfsTimes);*/
+    createCSV(string("./CSVs/bfsResults"), vector<string>{"Size", "Duration"}, bfsTimes);*/
 
     /*vector<vector<double>> aStarTimes = timeMultipleSolves(aStar, nRepeats, sizes);
     cout << "A* results (ms):\n" << aStarTimes << "\n\n";
-    createCSV(string("../CSVs/aStarResults"), vector<string>{"Size", "Duration"}, aStarTimes);*/
+    createCSV(string("./CSVs/aStarResults"), vector<string>{"Size", "Duration"}, aStarTimes);*/
 
     /*vector<vector<double>> dfsTimes = timeMultipleSolves(dfs, nRepeats, sizes);
     cout << "Dfs results (ms):\n" << dfsTimes << "\n\n";
-    createCSV(string("../CSVs/dfsResults"), vector<string>{"Size", "Duration"}, dfsTimes);*/
+    createCSV(string("./CSVs/dfsResults"), vector<string>{"Size", "Duration"}, dfsTimes);*/
 
     /*vector<vector<double>> bestFirstTimes = timeMultipleSolves(bestFirst, nRepeats, sizes);
     cout << "Best First results (ms):\n" << bestFirstTimes << "\n\n";
-    createCSV(string("../CSVs/bestFirstResults"), vector<string>{"Size", "Duration"}, bestFirstTimes);*/
+    createCSV(string("./CSVs/bestFirstResults"), vector<string>{"Size", "Duration"}, bestFirstTimes);*/
 
 
     //=======================Caves testing=============================

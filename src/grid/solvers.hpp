@@ -44,7 +44,7 @@ std::vector<std::vector<int>> bfs(Grid& grid){
         char& curPos = grid.paths[curPath[0]][curPath[1]] |= Grid::paint::VISITED;        
 
         //Creates a frame that will be added to a GIF
-        //grid.toImage(std::string("../GIFs/bfsFrames/frame_") + std::to_string(frameCount++));
+        //grid.toImage(std::string("./GIFs/bfsFrames/frame_") + std::to_string(frameCount++));
 
         //Checks if found the goal
         if(curPos & Grid::paint::GOAL){
@@ -97,7 +97,7 @@ std::vector<std::vector<int>> aStar(Grid& grid){
         char& curPos = grid.paths[curPath[0]][curPath[1]] |= Grid::paint::VISITED;
 
         //Creates a frame that will be added to a GIF
-        //grid.toImage(std::string("../GIFs/aStarFrames/frame_") + std::to_string(frameCount++));
+        //grid.toImage(std::string("./GIFs/aStarFrames/frame_") + std::to_string(frameCount++));
 
         //Checks if found the goal
         if(curPos & Grid::paint::GOAL){
@@ -154,7 +154,7 @@ std::vector<std::vector<int>> dfs(Grid& grid){
         char& curPos = grid.paths[curPath[0]][curPath[1]] |= Grid::paint::VISITED;        
 
         //Creates a frame that will be added to a GIF
-        //grid.toImage(std::string("../GIFs/dfsFrames/frame_") + std::to_string(frameCount++));
+        //grid.toImage(std::string("./GIFs/dfsFrames/frame_") + std::to_string(frameCount++));
 
         //Checks if found the goal
         if(curPos & Grid::paint::GOAL){
@@ -207,7 +207,7 @@ std::vector<std::vector<int>> bestFirst(Grid& grid){
         char& curPos = grid.paths[curPath[0]][curPath[1]] |= Grid::paint::VISITED;
 
         //Creates a frame that will be added to a GIF
-        //grid.toImage(std::string("../GIFs/bestFirstFrames/frame_") + std::to_string(frameCount++));
+        //grid.toImage(std::string("./GIFs/bestFirstFrames/frame_") + std::to_string(frameCount++));
 
         //Checks if found the goal
         if(curPos & Grid::paint::GOAL){
